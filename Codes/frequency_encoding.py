@@ -1,3 +1,6 @@
+import pandas as pd
+import numpy as np
+
 def freq_enc(df, cols):
     
     for col in cols:
