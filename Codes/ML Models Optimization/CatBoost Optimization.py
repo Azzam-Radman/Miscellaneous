@@ -96,3 +96,70 @@ dict_log_loss['params'] = dict_2
 dict_log_loss['Number of finished trials'] = len(study.trials)
 
 print(dict_log_loss)
+
+
+
+# Cell 6
+
+params = {
+        'depth': 4, 
+        'l2_leaf_reg': 91.3095103581495, 
+        'random_strength': 2.924465729859823, 
+         'grow_policy': 'SymmetricTree'
+        }
+
+
+n_splits=5
+seed_list=[0, 1, 2]
+skf = mlskf(n_splits=n_splits,shuffle=True,random_state=0)
+preds_valid_array = np.zeros((X.shape[0], y_dummied.shape[1]))
+preds_test_array = np.zeros((test.shape[0], y_dummied.shape[1]))
+log_loss_valid = []
+
+# stratified KFold
+for fold, (train_idx, valid_idx) in enumerate(skf.split(X, y_dummied)):
+    
+    print("==========================")
+    print(" Fold =", fold)
+    x_train, x_valid = X.iloc[train_idx, :], X.iloc[valid_idx, :]
+    y_train, y_valid = y.iloc[train_idx], y.iloc[valid_idx]
+
+    for seed in seed_list:
+        
+        print("Seed =", seed)
+        params['random_state'] = seed
+        params["loss_function"] = 'MultiClass'
+        params["cat_features"] = cat_feats
+
+        cls = CatBoostClassifier(
+                                   **params,
+                                   task_type="GPU",
+                                   border_count=128,
+                                   learning_rate=0.03,
+                                   iterations=10000,
+                                   use_best_model=True,
+                                   early_stopping_rounds=1000
+                                   )
+
+        cls.fit(x_train,y=y_train,
+              embedding_features=None,
+              use_best_model=True,
+              eval_set=[(x_valid,y_valid)],
+              verbose=1000)
+
+        # predict validation and test sets
+        preds_valid = cls.predict_proba(x_valid) # since this is multiclass classification do NOT use [:, 1]
+        preds_test = cls.predict_proba(test.drop('id', axis=1))
+        
+        # fill the arrays
+        preds_valid_array[valid_idx] += preds_valid / len(seed_list)
+        preds_test_array += preds_test / (len(seed_list) * n_splits)
+        # append scores
+        log_loss_valid.append(metrics.log_loss(y_valid, preds_valid))
+
+print("Mean log loss =", np.mean(log_loss_valid), "std log_loss =", np.std(log_loss_valid, ddof=1))
+
+sample.iloc[:, 1:] = preds_test_array
+sample.to_csv('catboost_test_11th.csv', index=False)
+
+pd.DataFrame(preds_valid_array, columns=[f"feature_{i}" for i in range(preds_valid_array.shape[1])]).to_csv('catboost_valid_11th.csv', index=False)
