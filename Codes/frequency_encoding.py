@@ -23,8 +23,8 @@ def freq_enc(df, cols):
 
 
 full_encoded = freq_enc(full_data, cols)
-X_enc = full_encoded.iloc[:len_X, :]
-test_enc = full_encoded.iloc[len_X:, :]
+X_enc = iii.iloc[:len_X, :].drop(['index']+cols, axis=1)
+test_enc = iii.iloc[len_X:, :].drop(['index']+cols, axis=1)
 
 train_enc = pd.concat([X_enc, y], axis=1)
 train_enc.to_csv('train_encoded.csv', index=False)
