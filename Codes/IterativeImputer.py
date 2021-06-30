@@ -13,3 +13,5 @@ imp_mean.fit([[7, 2, 3], [4, np.nan, 6], [10, 5, 9]])
 
 X = [[np.nan, 2, 3], [4, np.nan, 6], [10, np.nan, 9]]
 X = imp_mean.transform(X)
+
+# BayesianRidge and ExtraTree is found to perform better with IterativeImputer.
