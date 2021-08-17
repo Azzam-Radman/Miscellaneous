@@ -1,4 +1,3 @@
-
 class LOFO(object):
     
     def __init__(self, data, labels, model, n_splits, eval_metric):
