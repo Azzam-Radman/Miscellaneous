@@ -84,7 +84,7 @@ class LOFO(object):
         
         return good_scores, harmful_features
     
-    def transform(self, X):
+    def transform(self, X, test):
         
         X = self._data
         y = self._labels
