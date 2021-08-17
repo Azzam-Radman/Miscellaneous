@@ -93,9 +93,9 @@ class LOFO(object):
         eval_metric = self.eval_metric
         
         good_scores, harmful_features = self.selectionLoop(X.values, y.values, model, n_splits, eval_metric)
-        X = X.drop(X.columns[harmful_features], axis=1)
+        X = X.drop(list(X.columns.tolist()[i] for i in harmful_features), axis=1)
         X = X.dropna(axis=1, how='all')
-        test = test.drop(test.columns[harmful_features], axis=1)
+        test = test.drop(list(test.columns.tolist()[i] for i in harmful_features), axis=1)
         
         return X, test
       
