@@ -99,7 +99,7 @@ class LOFO(object):
         
         return X, test
       
-# X and y should be dataframes      
+# X, y and test should be in the form of Pandas DataFrames      
 lofo = LOFO(X, y, model=CatBoostRegressor(
                                    learning_rate=0.03,
                                    iterations=10000,
@@ -109,4 +109,4 @@ lofo = LOFO(X, y, model=CatBoostRegressor(
                                    early_stopping_rounds=100
                                    ), n_splits=5, eval_metric=metrics.mean_squared_error)
 
-X, test = LOFO.transform(lofo, X)
+X, test = LOFO.transform(lofo, X, test)
