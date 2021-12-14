@@ -39,16 +39,16 @@ class CustomModel(tf.keras.Model):
 # very necessary to adjust input size
 img_adjust_layer = tf.keras.layers.Lambda(lambda data: tf.keras.applications.imagenet_utils.preprocess_input(tf.cast(data, tf.float32), mode="torch"), 
                                               input_shape=[224, 224, 3])
-    model_ = CustomModel(10)
-    model = tf.keras.models.Sequential([
-        img_adjust_layer,
-        model_
-    ])
-    
-    model.compile(
-        optimizer=tf.keras.optimizers.Adam(learning_rate=1e-5),
-        loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=False),
-        metrics=['accuracy']
-                )
-    
-    model.fit(train_ds, validation_data=valid_ds, epochs=100, callbacks=[lr])
+model_ = CustomModel(10)
+model = tf.keras.models.Sequential([
+    img_adjust_layer,
+    model_
+])
+
+model.compile(
+    optimizer=tf.keras.optimizers.Adam(learning_rate=1e-5),
+    loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=False),
+    metrics=['accuracy']
+            )
+
+model.fit(train_ds, validation_data=valid_ds, epochs=100, callbacks=[lr])
