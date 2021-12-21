@@ -8,4 +8,4 @@ def step_decay_wrapper(initial_lr, num_epochs, min_lr):
         return lr
     return step_decay
   
-  LR_scheduler = LearningRateScheduler(step_decay_wrapper(LR, EPOCHS, 1e-6), verbose=1)
+LR_scheduler = LearningRateScheduler(step_decay_wrapper(LR, EPOCHS, 1e-6), verbose=1)
