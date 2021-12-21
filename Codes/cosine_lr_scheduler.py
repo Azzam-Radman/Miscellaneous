@@ -1,6 +1,6 @@
 def step_decay_wrapper(initial_lr, num_epochs, min_lr):
     def step_decay(epoch):
-        decays = np.linspace(0, np.pi/2, num_epochs//4)
+        decays = np.linspace(0, np.pi/2, num_epochs//4 + 1)
         decay_epoch = int(epoch % (num_epochs/4))
         drop = decays[decay_epoch]
         cos_drop = np.cos(drop)
