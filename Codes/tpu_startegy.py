@@ -16,7 +16,7 @@ elif len(gpus) > 1:
     print('Running on multiple GPUs ', [gpu.name for gpu in gpus])
 elif len(gpus) == 1:
     strategy = tf.distribute.get_strategy() # default strategy that works on CPU and single GPU
-print('Running on single GPU ', gpus[0].name)
+    print('Running on single GPU ', gpus[0].name)
 else:
     strategy = tf.distribute.get_strategy() # default strategy that works on CPU and single GPU
     print('Running on CPU')
