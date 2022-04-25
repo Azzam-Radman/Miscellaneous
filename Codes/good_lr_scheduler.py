@@ -3,4 +3,4 @@ history = model.fit(train_set, epochs=100, callbacks=[lr_scheduler]) # train for
 
 # then plot the loss versus the learning rate
 plt.semilogx(history.history['lr'], history.history['loss'])
-plt.axis([1e-8, 1e-4, 0, 30])
+plt.axis([1e-8, 1e-4, 0, 2])
